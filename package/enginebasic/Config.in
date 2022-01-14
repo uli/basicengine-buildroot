@@ -1,0 +1,5 @@
+config BR2_PACKAGE_ENGINEBASIC
+        bool "enginebasic"
+        help
+          This is a comment that explains what enginebasic is. The help text
+          should be wrapped.
