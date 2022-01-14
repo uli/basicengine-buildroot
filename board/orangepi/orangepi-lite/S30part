@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# Create/mount the data partition
+#
+
+case "$1" in
+  start)
+  	echo "Mounting data partition: "
+  	if test ! -e /dev/mmcblk0p3 ; then
+  		# The "2048" is there is coerce fdisk to make a reasonable
+  		# suggestion for the start sector. If we don't do that, it
+  		# will create a 1 MB partition in the gap before partition
+  		# 1...
+	  	fdisk /dev/mmcblk0 <<EOT
+n
+p
+3
+2048
+
+
+t
+3
+c
+w
+EOT
+		touch /make_vfat
+		/sbin/reboot
+	elif test -e /make_vfat ; then
+		mkfs.vfat -F 32 -n BASIC /dev/mmcblk0p3
+		mount -t vfat /dev/mmcblk0p3 /basic
+		zcat /usr/share/enginebasic/basic_sys.tar.gz | tar -C /basic -x
+		rm /make_vfat
+	else
+		mount -t vfat /dev/mmcblk0p3 /basic
+	fi
+	;;
+  stop)
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+
