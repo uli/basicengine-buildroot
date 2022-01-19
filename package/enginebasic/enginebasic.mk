@@ -20,7 +20,8 @@ define ENGINEBASIC_BUILD_CMDS
     mkdir $(@D)/demos ; tar --strip-components=1 -C $(@D)/demos -xzf $(ENGINEBASIC_DL_DIR)/master.tar.gz
     cd $(@D) ; PATH="$(STAGING_DIR)/usr/bin:$(PATH)" CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" DEMOS_DIR=$(@D)/demos ./configure.sh
     mkdir -p $(@D)/.git ; touch $(@D)/.git/index
-    echo "#define STR_VARSION \"\`git -C $(@D)/git describe --abbrev=4 --dirty --always --tags\`\"" >$(@D)/ttbasic/version.h
+    cd $(@D) ; ninja -f build.ninja.sdl ttbasic/version.h
+    echo "#define STR_VARSION \"$(shell git -C $(ENGINEBASIC_DL_DIR)/git describe --abbrev=4 --dirty --always --tags)\"" >$(@D)/ttbasic/version.h
     cd $(@D) ; ninja -f build.ninja.sdl ; ninja -f build.ninja.sdl init_dir
 endef
 
