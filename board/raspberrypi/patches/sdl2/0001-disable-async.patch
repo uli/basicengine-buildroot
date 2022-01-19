@@ -1,0 +1,19 @@
+commit ce9a3734963b21a4aa8af8aab65350894c7ff2ff
+Author: Ulrich Hecht <uli@basicengine.org>
+Date:   Wed Jan 19 17:52:06 2022 +0100
+
+    disable async
+
+diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+index fd3a3cd..6817014 100644
+--- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
++++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+@@ -786,7 +786,7 @@ KMSDRM_InitDisplays (_THIS) {
+     if (ret) {
+         SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "Could not determine async page flip capability.");
+     }
+-    viddata->async_pageflip_support = async_pageflip ? SDL_TRUE : SDL_FALSE;
++    viddata->async_pageflip_support = SDL_FALSE; //async_pageflip ? SDL_TRUE : SDL_FALSE;
+ 
+     /***********************************/
+     /* Block for Vulkan compatibility. */
