@@ -27,3 +27,5 @@ dtoverlay=miniuart-bt
 
 # enable autoprobing of Bluetooth driver without need of hciattach/btattach
 dtoverlay=krnbt=on
+dtoverlay=vc4-fkms-v3d
+dtparam=audio=on
