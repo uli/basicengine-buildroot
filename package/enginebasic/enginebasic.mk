@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-ENGINEBASIC_VERSION = 902ba30ff89657db3033b22847bce5c8f90ce191
+ENGINEBASIC_VERSION = sdl2
 ENGINEBASIC_SITE = $(call github,uli,basicengine-firmware,$(ENGINEBASIC_VERSION))
 #ENGINEBASIC_SITE = $(HOME)/devel/basic/enginebasic
 ENGINEBASIC_SITE_METHOD = git
