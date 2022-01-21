@@ -28,7 +28,7 @@ define TINYCC_INSTALL_TARGET_CMDS
   rm -f $(@D)/$(TINYCC_ARCH)-tcc $(@D)/$(TINYCC_ARCH)-libtcc1.a
   cd $(@D) ; $(MAKE) install DESTDIR=$(TARGET_DIR)
   cp -p $(STAGING_DIR)/usr/lib/crt?.o $(TARGET_DIR)/usr/lib/
-  cp -p $(STAGING_DIR)/usr/lib/libc.so $(TARGET_DIR)/usr/lib/
+  ln -sf /lib/libc.so.1 $(TARGET_DIR)/usr/lib/libc.so
 endef
 
 $(eval $(generic-package))
