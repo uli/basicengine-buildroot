@@ -1390,6 +1390,7 @@ menu "Tcl libraries/modules"
 	source "package/tcllib/Config.in"
 endmenu
 endif
+	source "package/tinycc/Config.in"
 endmenu
 
 menu "Libraries"
