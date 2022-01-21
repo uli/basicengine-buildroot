@@ -10,7 +10,7 @@ ENGINEBASIC_SITE = $(call github,uli,basicengine-firmware,$(ENGINEBASIC_VERSION)
 ENGINEBASIC_SITE_METHOD = git
 ENGINEBASIC_LICENSE = GPL-3.0+
 ENGINEBASIC_LICENSE_FILES = README.md
-ENGINEBASIC_DEPENDENCIES = sdl2
+ENGINEBASIC_DEPENDENCIES = sdl2 host-ninja libgpiod
 
 ENGINEBASIC_EXTRA_DOWNLOADS += \
 	$(call github,uli,basicengine-demos,refs/heads/master.tar.gz)
