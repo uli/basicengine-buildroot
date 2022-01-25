@@ -28,10 +28,12 @@ EOT
 	elif test -e /make_vfat ; then
 		mkfs.vfat -F 32 -n BASIC /dev/mmcblk0p3
 		mount -t vfat /dev/mmcblk0p3 /basic
-		zcat /usr/share/enginebasic/basic_sys.tar.gz | tar -C /basic -x
-		rm /make_vfat
 	else
 		mount -t vfat /dev/mmcblk0p3 /basic
+	fi
+	if test ! -e /basic/sys
+		zcat /usr/share/enginebasic/basic_sys.tar.gz | tar -C /basic -x
+		rm /make_vfat
 	fi
 	;;
   stop)
