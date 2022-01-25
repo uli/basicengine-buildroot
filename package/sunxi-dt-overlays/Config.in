@@ -1,0 +1,5 @@
+config BR2_PACKAGE_SUNXI_DT_OVERLAYS
+	bool "sunxi-dt-overlays"
+	depends on BR2_arm || BR2_aarch64
+	help
+		sunxi DT overlays
