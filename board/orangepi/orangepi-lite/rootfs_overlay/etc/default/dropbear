@@ -1,0 +1,2 @@
+# allow passwordless login
+DROPBEAR_ARGS="-B"
