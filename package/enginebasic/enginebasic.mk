@@ -16,6 +16,7 @@ ENGINEBASIC_EXTRA_DOWNLOADS += \
 	$(call github,uli,basicengine-demos,refs/heads/master.tar.gz)
 
 define ENGINEBASIC_BUILD_CMDS
+    test -e $(HOME)/basic_engine_pcx_official.h && cp -p $(HOME)/basic_engine_pcx_official.h $(@D)/ttbasic/basic_engine_pcx.h || true
     rm -fr $(@D)/build_* $(@D)/demos
     mkdir $(@D)/demos ; tar --strip-components=1 -C $(@D)/demos -xzf $(ENGINEBASIC_DL_DIR)/master.tar.gz
     cd $(@D) ; PATH="$(STAGING_DIR)/usr/bin:$(PATH)" CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" DEMOS_DIR=$(@D)/demos ./configure.sh
