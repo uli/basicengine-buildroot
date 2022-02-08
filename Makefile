@@ -728,7 +728,8 @@ target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
 		$(TARGET_DIR)/usr/lib/rpm $(TARGET_DIR)/usr/doc
 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
 	find $(TARGET_DIR)/lib/ $(TARGET_DIR)/usr/lib/ $(TARGET_DIR)/usr/libexec/ \
-		\( -name '*.la' -o -name '*.prl' \) -print0 | xargs -0 rm -f
+		\( -name '*.a' -o -name '*.la' -o -name '*.prl' \) | \
+		fgrep -v libtcc | xargs -d'\n' rm -f
 ifneq ($(BR2_PACKAGE_GDB),y)
 	rm -rf $(TARGET_DIR)/usr/share/gdb
 endif
