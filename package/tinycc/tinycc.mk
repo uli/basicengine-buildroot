@@ -9,6 +9,9 @@ TINYCC_SITE = git://repo.or.cz/tinycc.git
 TINYCC_LICENSE = LGPL-2.1+
 TINYCC_LICENSE_FILES = COPYING
 
+# XXX: better way to ensure all important headers are installed already?
+TINYCC_DEPENDENCIES = enginebasic
+
 # Calculate TINYCC_ARCH
 ifeq ($(ARCH),aarch64)
 TINYCC_ARCH = arm64
@@ -25,6 +28,9 @@ define TINYCC_BUILD_CMDS
 endef
 
 define TINYCC_INSTALL_TARGET_CMDS
+  cp -a $(STAGING_DIR)/usr/include $(TARGET_DIR)/usr
+  rm -fr $(TARGET_DIR)/usr/include/linux/{netfilter*,nl80211*,bpf*,dvb,can,zorro*,firewire-c*,android}
+  rm -fr $(TARGET_DIR)/usr/include/glib-2.0
   rm -f $(@D)/$(TINYCC_ARCH)-tcc $(@D)/$(TINYCC_ARCH)-libtcc1.a
   cd $(@D) ; $(MAKE) install DESTDIR=$(TARGET_DIR)
   cp -p $(STAGING_DIR)/usr/lib/crt?.o $(TARGET_DIR)/usr/lib/
