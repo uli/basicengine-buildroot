@@ -1,0 +1,5 @@
+config BR2_PACKAGE_ATTO
+	bool "atto"
+	depends on BR2_PACKAGE_NCURSES_WCHAR
+	help
+	  The smallest functional Emacs in less than 2000 lines of C.
