@@ -1,0 +1,34 @@
+From c668cc976a09b965acef659382cbb5c20fdddbeb Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Thu, 10 Feb 2022 16:09:30 +0100
+Subject: [PATCH] disable root check
+
+---
+ src/curses/ux_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/curses/ux_init.c b/src/curses/ux_init.c
+index bc518b3..9c20413 100644
+--- a/src/curses/ux_init.c
++++ b/src/curses/ux_init.c
+@@ -203,7 +203,7 @@ void os_process_arguments (int argc, char *argv[])
+ 
+ 	zoptarg = NULL;
+ 
+-#if !defined(WIN32) && !defined(__HAIKU__)
++#if 0 //!defined(WIN32) && !defined(__HAIKU__)
+ 	if ((getuid() == 0) || (geteuid() == 0)) {
+ 		printf("I won't run as root!\n");
+ 		os_quit(EXIT_FAILURE);
+@@ -796,7 +796,7 @@ static FILE *pathopen(const char *name, const char *path, const char *mode)
+ 	 */
+ 	size_t buf_sz = strlen(path) + strlen(name) + sizeof(DIRSEP) + 1;
+ 	buf = malloc(buf_sz);
+-	
++
+ 	/*
+ 	 * Split the PATH string where the PATHSEP character appears
+ 	 * and try to open the named file at each portion of the path
+-- 
+2.20.1
+
