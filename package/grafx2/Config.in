@@ -3,5 +3,6 @@ config BR2_PACKAGE_GRAFX2
 	select BR2_PACKAGE_LIBPNG
 	select BR2_PACKAGE_SDL2_IMAGE
 	select BR2_PACKAGE_TIFF
+	select BR2_PACKAGE_LUA
         help
           GrafX2 - The Ultimate 256-color bitmap paint program

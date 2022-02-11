@@ -7,7 +7,7 @@
 GRAFX2_VERSION = aab99d474b9d775f3403c847600871a495901fad
 GRAFX2_SITE = https://gitlab.com/GrafX2/grafX2.git
 GRAFX2_SITE_METHOD = git
-GRAFX2_DEPENDENCIES = sdl2 sdl2_image libpng tiff
+GRAFX2_DEPENDENCIES = libpng lua sdl2 sdl2_image tiff
 GRAFX2_GIT_SUBMODULES = YES
 
 GRAFX2_EXTRA_DOWNLOADS = https://github.com/redcode/6502/releases/download/v0.1/6502-v0.1.tar.xz
