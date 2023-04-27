@@ -1,0 +1,30 @@
+From e540a351c2144b6a7401f3ab44ddc156fd1a97c5 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Thu, 27 Apr 2023 10:31:46 +0200
+Subject: [PATCH] HACK: /dev/mem map cached
+
+---
+ drivers/char/mem.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index 94c2b55..fe42c99 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -396,9 +396,13 @@ static int mmap_mem(struct file *file, struct vm_area_struct *vma)
+ 						&vma->vm_page_prot))
+ 		return -EINVAL;
+ 
++	if (file->f_flags & O_DSYNC)
++		vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++#if 0
+ 	vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
+ 						 size,
+ 						 vma->vm_page_prot);
++#endif
+ 
+ 	vma->vm_ops = &mmap_mem_ops;
+ 
+-- 
+2.39.2
+
