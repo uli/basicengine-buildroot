@@ -6,7 +6,6 @@
 
 JAILHOUSE_VERSION = next
 JAILHOUSE_SITE = $(call github,siemens,jailhouse,$(JAILHOUSE_VERSION))
-JAILHOUSE_SITE_METHOD = git
 JAILHOUSE_LICENSE = GPL-2.0
 JAILHOUSE_LICENSE_FILES = COPYING
 JAILHOUSE_DEPENDENCIES = \
@@ -41,12 +40,14 @@ endef
 define JAILHOUSE_INSTALL_TARGET_CMDS
 	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D) modules_install firmware_install tool_inmates_install
 	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)/tools src=$(@D)/tools install
+	mv $(TARGET_DIR)/usr/local/sbin/{jailhouse,ivshmem-demo} $(TARGET_DIR)/usr/sbin/
+	rm -fr $(TARGET_DIR)/usr/local/man
 
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/jailhouse
 	$(INSTALL) -D -m 0644 $(@D)/configs/*/*.cell $(TARGET_DIR)/etc/jailhouse
 
-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/local/libexec/jailhouse/demos
-	$(INSTALL) -D -m 0755 $(@D)/inmates/demos/*/*.bin $(TARGET_DIR)/usr/local/libexec/jailhouse/demos
+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/libexec/jailhouse/demos
+	$(INSTALL) -D -m 0755 $(@D)/inmates/demos/*/*.bin $(TARGET_DIR)/usr/libexec/jailhouse/demos
 
 	$(if $(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS), \
 		cd $(@D) && $(PKG_PYTHON_SETUPTOOLS_ENV) $(HOST_DIR)/bin/python setup.py install --no-compile $(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS))
