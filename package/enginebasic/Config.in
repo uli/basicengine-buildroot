@@ -1,0 +1,4 @@
+config BR2_PACKAGE_ENGINEBASIC
+        bool "enginebasic"
+        help
+	  Engine BASIC for Jailhouse
