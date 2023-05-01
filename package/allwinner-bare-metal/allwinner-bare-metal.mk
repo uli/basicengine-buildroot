@@ -9,7 +9,7 @@ HOST_ALLWINNER_BARE_METAL_SITE = $(call github,uli,allwinner-bare-metal,$(HOST_A
 HOST_ALLWINNER_BARE_METAL_LICENSE = GPL-2.0
 HOST_ALLWINNER_BARE_METAL_LICENSE_FILES = COPYING
 HOST_ALLWINNER_BARE_METAL_DEPENDENCIES = \
-	host-allwinner-bare-metal-toolchain host-ninja
+	host-allwinner-bare-metal-toolchain host-ninja sdl2
 
 define HOST_ALLWINNER_BARE_METAL_CONFIGURE_CMDS
 	cd $(@D) ; JAILHOUSE=1 \
