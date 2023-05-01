@@ -8,4 +8,4 @@ tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
 sysfs		/sys		sysfs	defaults	0	0
 configfs	/sys/kernel/config	configfs	defaults	0	0
 /dev/mmcblk0p1	/boot		vfat	ro,nofail	0	0
-LABEL=BASIC	/basic		vfat	rw,nofail	0	0
+LABEL=BASIC	/sd		vfat	rw,nofail	0	0

@@ -44,10 +44,10 @@ EOT
 		mount -o remount,rw /
 		rm /make_vfat
 		mount -o remount,ro /
-		mount -t vfat ${data_part} /basic
+		mount -t vfat ${data_part} /sd
 	fi
-	if test ! -e /basic/sys ; then
-		zcat /usr/share/enginebasic/basic_sys.tar.gz | tar -C /basic -x
+	if test ! -e /sd/sys ; then
+		zcat /usr/share/enginebasic/basic_sys.tar.gz | tar -C /sd -x
 	fi
 	;;
   stop)
