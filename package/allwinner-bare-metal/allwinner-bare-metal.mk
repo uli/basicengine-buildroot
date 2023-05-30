@@ -25,7 +25,7 @@ endef
 
 define HOST_ALLWINNER_BARE_METAL_INSTALL_CMDS
 	rsync -av --delete "$(@D)/" "$(HOST_DIR)/allwinner-bare-metal/"
-	cp -p "$(@D)"/*_server "$(TARGET_DIR)/usr/bin"
+	cp -p "$(@D)"/*_server "$(@D)"/jailgdb "$(TARGET_DIR)/usr/bin"
 endef
 
 $(eval $(host-generic-package))
