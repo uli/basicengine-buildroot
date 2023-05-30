@@ -31,6 +31,7 @@ endef
 
 define ENGINEBASIC_INSTALL_TARGET_CMDS
     $(INSTALL) -D -m 0755 $(@D)/basic.bin $(TARGET_DIR)/lib/firmware/basic.bin
+    $(INSTALL) -D -m 0755 $(@D)/basic.elf $(TARGET_DIR)/lib/firmware/basic.elf
     mkdir -p $(TARGET_DIR)/sd
     mkdir -p $(TARGET_DIR)/usr/share/enginebasic
     mkdir -p $(@D)/init_dir/sys/etc/dropbear
