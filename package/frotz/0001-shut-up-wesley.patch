@@ -1,0 +1,27 @@
+diff --git a/src/curses/ux_init.c b/src/curses/ux_init.c
+index 8044aa1..f86ab72 100644
+--- a/src/curses/ux_init.c
++++ b/src/curses/ux_init.c
+@@ -204,13 +204,6 @@ void os_process_arguments (int argc, char *argv[])
+ 
+ 	zoptarg = NULL;
+ 
+-#if !defined(WIN32) && !defined(__HAIKU__)
+-	if ((getuid() == 0) || (geteuid() == 0)) {
+-		printf("I won't run as root!\n");
+-		os_quit(EXIT_FAILURE);
+-	}
+-#endif
+-
+ #ifdef WIN32
+ #define HOMEDIR "USERPROFILE"
+ #else
+@@ -809,7 +802,7 @@ static FILE *pathopen(const char *name, const char *path, const char *mode)
+ 	 */
+ 	size_t buf_sz = strlen(path) + strlen(name) + sizeof(DIRSEP) + 1;
+ 	buf = malloc(buf_sz);
+-	
++
+ 	/*
+ 	 * Split the PATH string where the PATHSEP character appears
+ 	 * and try to open the named file at each portion of the path
