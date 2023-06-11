@@ -28,8 +28,9 @@ else
 	setenv bootmenu_17 NanoPi Neo Air=setenv menu_dtb sun8i-h3-nanopi-neo-air.dtb
 	setenv bootmenu_18 NanoPi Neo=setenv menu_dtb sun8i-h3-nanopi-neo.dtb
 	setenv bootmenu_19 NanoPi R1=setenv menu_dtb sun8i-h3-nanopi-r1.dtb
-	setenv bootmenu_20 Rervision DVK=setenv menu_dtb sun8i-h3-rervision-dvk.dtb
-	setenv bootmenu_21 Orange Pi Zero=setenv menu_dtb sun8i-h2-plus-orangepi-zero.dtb
+	setenv bootmenu_20 R69 STB with rtl8723as WiFi=setenv menu_dtb sun8i-h3-r69-rtl8723as.dtb
+	setenv bootmenu_21 Rervision DVK=setenv menu_dtb sun8i-h3-rervision-dvk.dtb
+	setenv bootmenu_22 Orange Pi Zero=setenv menu_dtb sun8i-h2-plus-orangepi-zero.dtb
 
 	bootmenu 600
 	saveenv
