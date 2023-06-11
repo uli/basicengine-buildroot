@@ -1,0 +1,388 @@
+From 42114aba135f5e22387f7a0a7b884850e47b8f66 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Sun, 11 Jun 2023 11:09:22 +0200
+Subject: [PATCH 1/2] qnd upport to 5.10.y
+
+---
+ Makefile                   |  4 ++--
+ core/rtw_security.c        | 10 +++++-----
+ hal/OUTSRC/odm_types.h     |  7 ++++---
+ include/osdep_service.h    | 34 +++++++++++++++++++++++++---------
+ include/rtw_security.h     |  2 +-
+ os_dep/linux/os_intfs.c    |  6 ++++--
+ os_dep/linux/rtw_android.c |  4 ++--
+ os_dep/linux/sdio_intf.c   |  2 +-
+ os_dep/linux/usb_intf.c    |  2 +-
+ os_dep/osdep_service.c     | 18 +++++++++---------
+ 10 files changed, 54 insertions(+), 35 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 613c83d..6aa77db 100755
+--- a/Makefile
++++ b/Makefile
+@@ -25,9 +25,9 @@ CONFIG_RTL8192D = n
+ CONFIG_RTL8723A = y
+ CONFIG_RTL8188E = n
+ 
+-CONFIG_USB_HCI = y
++CONFIG_USB_HCI = n
+ CONFIG_PCI_HCI = n
+-CONFIG_SDIO_HCI = n
++CONFIG_SDIO_HCI = y
+ CONFIG_GSPI_HCI = n
+ 
+ CONFIG_MP_INCLUDED = y
+diff --git a/core/rtw_security.c b/core/rtw_security.c
+index c54d98c..3ae1ee0 100755
+--- a/core/rtw_security.c
++++ b/core/rtw_security.c
+@@ -1949,7 +1949,7 @@ exit:
+ }
+ #ifndef PLATFORM_FREEBSD
+ /* compress 512-bits */
+-static int sha256_compress(struct sha256_state *md, unsigned char *buf)
++static int sha256_compress(struct rtw_sha256_state *md, unsigned char *buf)
+ {
+ 	u32 S[8], W[64], t0, t1;
+ 	u32 t;
+@@ -1991,7 +1991,7 @@ static int sha256_compress(struct sha256_state *md, unsigned char *buf)
+ }
+ 
+ /* Initialize the hash state */
+-static void sha256_init(struct sha256_state *md)
++static void sha256_init(struct rtw_sha256_state *md)
+ {
+ 	md->curlen = 0;
+ 	md->length = 0;
+@@ -2012,7 +2012,7 @@ static void sha256_init(struct sha256_state *md)
+    @param inlen  The length of the data (octets)
+    @return CRYPT_OK if successful
+ */
+-static int sha256_process(struct sha256_state *md, unsigned char *in,
++static int sha256_process(struct rtw_sha256_state *md, unsigned char *in,
+ 			  unsigned long inlen)
+ {
+ 	unsigned long n;
+@@ -2053,7 +2053,7 @@ static int sha256_process(struct sha256_state *md, unsigned char *in,
+    @param out [out] The destination of the hash (32 bytes)
+    @return CRYPT_OK if successful
+ */
+-static int sha256_done(struct sha256_state *md, unsigned char *out)
++static int sha256_done(struct rtw_sha256_state *md, unsigned char *out)
+ {
+ 	int i;
+ 
+@@ -2105,7 +2105,7 @@ static int sha256_done(struct sha256_state *md, unsigned char *out)
+ static int sha256_vector(size_t num_elem, u8 *addr[], size_t *len,
+ 		  u8 *mac)
+ {
+-	struct sha256_state ctx;
++	struct rtw_sha256_state ctx;
+ 	size_t i;
+ 
+ 	sha256_init(&ctx);
+diff --git a/hal/OUTSRC/odm_types.h b/hal/OUTSRC/odm_types.h
+index b243d74..68f2337 100755
+--- a/hal/OUTSRC/odm_types.h
++++ b/hal/OUTSRC/odm_types.h
+@@ -20,6 +20,7 @@
+ #ifndef __ODM_TYPES_H__
+ #define __ODM_TYPES_H__
+ 
++#include <osdep_service.h>
+ //
+ // Define Different SW team support
+ //
+@@ -135,7 +136,7 @@ typedef enum _RT_SPINLOCK_TYPE{
+ 
+ 	typedef struct rtl8192cd_priv	*prtl8192cd_priv;
+ 	typedef struct stat_info		STA_INFO_T,*PSTA_INFO_T;
+-	typedef struct timer_list		RT_TIMER, *PRT_TIMER;
++	typedef _timer		RT_TIMER, *PRT_TIMER;
+ 	typedef  void *					RT_TIMER_CALL_BACK;
+ 	
+ 	#define 	DEV_BUS_TYPE  		RT_PCI_INTERFACE
+@@ -162,7 +163,7 @@ typedef enum _RT_SPINLOCK_TYPE{
+ 
+ 	typedef struct rtl8192cd_priv	*prtl8192cd_priv;
+ 	typedef struct stat_info		STA_INFO_T,*PSTA_INFO_T;
+-	typedef struct timer_list		RT_TIMER, *PRT_TIMER;
++	typedef _timer		RT_TIMER, *PRT_TIMER;
+ 	typedef  void *				RT_TIMER_CALL_BACK;
+ 	
+ 	#define DEV_BUS_TYPE  	RT_PCI_INTERFACE
+@@ -225,7 +226,7 @@ typedef enum _RT_SPINLOCK_TYPE{
+ 		#define	ODM_ENDIAN_TYPE			ODM_ENDIAN_BIG
+ 	#endif
+ 	
+-	typedef struct timer_list		RT_TIMER, *PRT_TIMER;
++	typedef _timer		RT_TIMER, *PRT_TIMER;
+ 	typedef  void *				RT_TIMER_CALL_BACK;
+ 	#define	STA_INFO_T			struct sta_info
+ 	#define	PSTA_INFO_T		struct sta_info *
+diff --git a/include/osdep_service.h b/include/osdep_service.h
+index 97b524a..c68e733 100755
+--- a/include/osdep_service.h
++++ b/include/osdep_service.h
+@@ -95,7 +95,6 @@
+ //	typedef	spinlock_t	_lock;
+ 	typedef	struct mtx	_lock;
+ 	typedef struct mtx 		_mutex;
+-	typedef struct timer_list _timer;
+ 	struct list_head {
+ 	struct list_head *next, *prev;
+ 	};
+@@ -688,11 +687,17 @@ __inline static void rtw_list_delete(_list *plist)
+ 	INIT_LIST_HEAD(plist);
+ }
+ 
++static inline void timer_hdl(struct timer_list *in_timer)
++{
++	_timer *ptimer = from_timer(ptimer, in_timer, timer);
++	ptimer->function(ptimer->arg);
++}
++
+ __inline static void _init_timer(_timer *ptimer,_nic_hdl padapter,void *pfunc,void* cntx)
+ {
+ 	ptimer->function = pfunc;
+ 	ptimer->arg = cntx;
+-	callout_init(&ptimer->callout, CALLOUT_MPSAFE);
++	timer_setup(&ptimer->timer, timer_hdl, 0);
+ }
+ 
+ __inline static void _set_timer(_timer *ptimer,u32 delay_time)
+@@ -822,7 +827,13 @@ __inline static void _set_workitem(_workitem *pwork)
+ #else
+ 	typedef struct semaphore	_mutex;
+ #endif
+-	typedef struct timer_list _timer;
++struct rtw_timer_list {
++	struct timer_list timer;
++	void (*function)(void *);
++	void *arg;
++};
++
++typedef struct rtw_timer_list _timer;
+ 
+ 	struct	__queue	{
+ 		struct	list_head	queue;	
+@@ -948,22 +959,28 @@ __inline static void rtw_list_delete(_list *plist)
+ 	list_del_init(plist);
+ }
+ 
++static inline void timer_hdl(struct timer_list *in_timer)
++{
++	_timer *ptimer = from_timer(ptimer, in_timer, timer);
++	ptimer->function(ptimer->arg);
++}
++
+ __inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
+ {
+ 	//setup_timer(ptimer, pfunc,(u32)cntx);	
+ 	ptimer->function = pfunc;
+-	ptimer->data = (unsigned long)cntx;
+-	init_timer(ptimer);
++	ptimer->arg = cntx;
++	timer_setup(&ptimer->timer, timer_hdl, 0);
+ }
+ 
+ __inline static void _set_timer(_timer *ptimer,u32 delay_time)
+ {	
+-	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));	
++	mod_timer(&ptimer->timer , (jiffies+(delay_time*HZ/1000)));
+ }
+ 
+ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
+ {
+-	del_timer_sync(ptimer); 	
++	del_timer_sync(&ptimer->timer);
+ 	*bcancelled=  _TRUE;//TRUE ==1; FALSE==0
+ }
+ 
+@@ -1394,7 +1411,7 @@ extern void rtw_yield_os(void);
+ __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
+ {
+ #ifdef PLATFORM_LINUX
+-	return del_timer_sync(ptimer);
++	return del_timer_sync(&ptimer->timer);
+ #endif
+ #ifdef PLATFORM_FREEBSD
+ 	_cancel_timer(ptimer,0);
+@@ -1415,7 +1432,6 @@ static __inline void thread_enter(char *name);
+ static __inline void thread_enter(char *name)
+ {
+ #ifdef PLATFORM_LINUX
+-	daemonize("%s", name);
+ 	allow_signal(SIGTERM);
+ #endif
+ #ifdef PLATFORM_FREEBSD
+diff --git a/include/rtw_security.h b/include/rtw_security.h
+index e0790f9..8b3c5d6 100755
+--- a/include/rtw_security.h
++++ b/include/rtw_security.h
+@@ -196,7 +196,7 @@ struct security_priv
+ 	u8 bWepDefaultKeyIdxSet;
+ };
+ 
+-struct sha256_state {
++struct rtw_sha256_state {
+ 	u64 length;
+ 	u32 state[8], curlen;
+ 	u8 buf[64];
+diff --git a/os_dep/linux/os_intfs.c b/os_dep/linux/os_intfs.c
+index 2b8e308..8fd11f6 100755
+--- a/os_dep/linux/os_intfs.c
++++ b/os_dep/linux/os_intfs.c
+@@ -298,6 +298,7 @@ static int	rtw_proc_cnt = 0;
+ 
+ void rtw_proc_init_one(struct net_device *dev)
+ {
++#if 0
+ 	struct proc_dir_entry *dir_dev = NULL;
+ 	struct proc_dir_entry *entry=NULL;
+ 	_adapter	*padapter = rtw_netdev_priv(dev);
+@@ -329,7 +330,7 @@ void rtw_proc_init_one(struct net_device *dev)
+ #if(LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
+ 		rtw_proc=create_proc_entry(rtw_proc_name, S_IFDIR, proc_net);
+ #else
+-		rtw_proc=create_proc_entry(rtw_proc_name, S_IFDIR, init_net.proc_net);
++		rtw_proc=proc_create_data(rtw_proc_name, S_IFDIR, init_net.proc_net);
+ #endif
+ 		if (rtw_proc == NULL) {
+ 			DBG_871X(KERN_ERR "Unable to create rtw_proc directory\n");
+@@ -615,6 +616,7 @@ void rtw_proc_init_one(struct net_device *dev)
+ 	}
+ 	entry->write_proc = proc_set_btcoex_dbg;
+ #endif /*CONFIG_BT_COEXIST*/
++#endif // 0
+ }
+ 
+ void rtw_proc_remove_one(struct net_device *dev)
+@@ -903,7 +905,7 @@ unsigned int rtw_classify8021d(struct sk_buff *skb)
+ 	return dscp >> 5;
+ }
+ 
+-static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb)
++static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb, struct net_device *sb_dev)
+ {
+ 	_adapter	*padapter = rtw_netdev_priv(dev);
+ 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+diff --git a/os_dep/linux/rtw_android.c b/os_dep/linux/rtw_android.c
+index 8547a9d..6168883 100755
+--- a/os_dep/linux/rtw_android.c
++++ b/os_dep/linux/rtw_android.c
+@@ -231,7 +231,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
+ {
+ 	int cmd_num;
+ 	for(cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
+-		if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
++		if(0 == strncasecmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+ 			break;
+ 		
+ 	return cmd_num;
+@@ -355,7 +355,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
+ 		goto exit;
+ 	}
+ 
+-	if (!access_ok(VERIFY_READ, priv_cmd.buf, priv_cmd.total_len)){
++	if (!access_ok(priv_cmd.buf, priv_cmd.total_len)){
+ 	 	DBG_871X("%s: failed to access memory\n", __FUNCTION__);
+ 		ret = -EFAULT;
+ 		goto exit;
+diff --git a/os_dep/linux/sdio_intf.c b/os_dep/linux/sdio_intf.c
+index f09bfdf..9c811a3 100755
+--- a/os_dep/linux/sdio_intf.c
++++ b/os_dep/linux/sdio_intf.c
+@@ -1152,7 +1152,7 @@ static int __init rtw_drv_entry(void)
+ //	DBG_871X(KERN_INFO "+%s", __func__);
+ 	RT_TRACE(_module_hci_intfs_c_, _drv_notice_, ("+rtw_drv_entry\n"));
+ 	DBG_871X(DRV_NAME " driver version=%s\n", DRIVERVERSION);
+-	DBG_871X("build time: %s %s\n", __DATE__, __TIME__);
++//	DBG_871X("build time: %s %s\n", __DATE__, __TIME__);
+ 
+ #ifdef CONFIG_PLATFORM_ARM_SUNxI
+ /*depends on sunxi power control */
+diff --git a/os_dep/linux/usb_intf.c b/os_dep/linux/usb_intf.c
+index 61583f0..0e7cadf 100755
+--- a/os_dep/linux/usb_intf.c
++++ b/os_dep/linux/usb_intf.c
+@@ -1858,7 +1858,7 @@ static int __init rtw_drv_entry(void)
+ 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_drv_entry\n"));
+ 
+ 	DBG_871X(DRV_NAME " driver version=%s\n", DRIVERVERSION);
+-	DBG_871X("build time: %s %s\n", __DATE__, __TIME__);
++//	DBG_871X("build time: %s %s\n", __DATE__, __TIME__);
+ 	
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24)) 
+ 	//console_suspend_enabled=0;
+diff --git a/os_dep/osdep_service.c b/os_dep/osdep_service.c
+index 54509b7..4881fb5 100755
+--- a/os_dep/osdep_service.c
++++ b/os_dep/osdep_service.c
+@@ -1550,7 +1550,7 @@ static int isFileReadable(char *path)
+ { 
+ 	struct file *fp;
+ 	int ret = 0;
+-	mm_segment_t oldfs;
++//	mm_segment_t oldfs;
+ 	char buf;
+  
+ 	fp=filp_open(path, O_RDONLY, 0); 
+@@ -1558,12 +1558,12 @@ static int isFileReadable(char *path)
+ 		ret = PTR_ERR(fp);
+ 	}
+ 	else {
+-		oldfs = get_fs(); set_fs(get_ds());
++//		oldfs = get_fs(); set_fs(get_ds());
+ 		
+ 		if(1!=readFile(fp, &buf, 1))
+ 			ret = PTR_ERR(fp);
+ 		
+-		set_fs(oldfs);
++//		set_fs(oldfs);
+ 		filp_close(fp,NULL);
+ 	}	
+ 	return ret;
+@@ -1579,16 +1579,16 @@ static int isFileReadable(char *path)
+ static int retriveFromFile(char *path, u8* buf, u32 sz)
+ {
+ 	int ret =-1;
+-	mm_segment_t oldfs;
++//	mm_segment_t oldfs;
+ 	struct file *fp;
+ 
+ 	if(path && buf) {
+ 		if( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
+ 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
+ 
+-			oldfs = get_fs(); set_fs(get_ds());
++//			oldfs = get_fs(); set_fs(get_ds());
+ 			ret=readFile(fp, buf, sz);
+-			set_fs(oldfs);
++//			set_fs(oldfs);
+ 			closeFile(fp);
+ 			
+ 			DBG_871X("%s readFile, ret:%d\n",__FUNCTION__, ret);
+@@ -1613,16 +1613,16 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
+ static int storeToFile(char *path, u8* buf, u32 sz)
+ {
+ 	int ret =0;
+-	mm_segment_t oldfs;
++//	mm_segment_t oldfs;
+ 	struct file *fp;
+ 	
+ 	if(path && buf) {
+ 		if( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
+ 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
+ 
+-			oldfs = get_fs(); set_fs(get_ds());
++//			oldfs = get_fs(); set_fs(get_ds());
+ 			ret=writeFile(fp, buf, sz);
+-			set_fs(oldfs);
++//			set_fs(oldfs);
+ 			closeFile(fp);
+ 
+ 			DBG_871X("%s writeFile, ret:%d\n",__FUNCTION__, ret);
+-- 
+2.39.2
+

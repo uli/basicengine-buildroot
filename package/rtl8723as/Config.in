@@ -1,0 +1,10 @@
+config BR2_PACKAGE_RTL8723AS
+	bool "rtl8723as"
+	depends on !BR2_s390x
+	depends on BR2_LINUX_KERNEL
+	help
+	  Wireless driver rtl8723as.
+
+comment "rtl8723as needs a Linux kernel to be built"
+	depends on !BR2_s390x
+	depends on !BR2_LINUX_KERNEL
