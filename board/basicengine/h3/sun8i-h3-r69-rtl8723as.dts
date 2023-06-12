@@ -92,38 +92,6 @@
 			gpios = <&pio 0 15 GPIO_ACTIVE_LOW>;
 		};
 	};
-
-	/* XXX: probably doesn't exist */
-	r_gpio_keys {
-		compatible = "gpio-keys";
-
-		sw4 {
-			label = "sw4";
-			linux,code = <BTN_0>;
-			gpios = <&r_pio 0 3 GPIO_ACTIVE_LOW>;
-		};
-	};
-
-	/* XXX: probably bogus */
-	reg_vdd_cpux: vdd-cpux-regulator {
-		compatible = "regulator-gpio";
-		regulator-name = "vdd-cpux";
-		regulator-type = "voltage";
-		regulator-boot-on;
-		regulator-always-on;
-		regulator-min-microvolt = <1100000>;
-		regulator-max-microvolt = <1300000>;
-		regulator-ramp-delay = <50>; /* 4ms */
-
-		gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>; /* PL6 */
-		enable-active-high;
-		gpios-states = <0x1>;
-		states = <1100000 0>, <1300000 1>;
-	};
-};
-
-&cpu0 {
-	cpu-supply = <&reg_vdd_cpux>;
 };
 
 &de {
@@ -135,6 +103,14 @@
 };
 
 &ehci1 {
+	status = "okay";
+};
+
+&ehci2 {
+	status = "okay";
+};
+
+&ehci3 {
 	status = "okay";
 };
 
@@ -202,8 +178,11 @@
 	status = "okay";
 };
 
-&reg_usb0_vbus {
-	gpio = <&r_pio 0 2 GPIO_ACTIVE_HIGH>; /* PL2 */
+&ohci2 {
+	status = "okay";
+};
+
+&ohci3 {
 	status = "okay";
 };
 
@@ -231,9 +210,12 @@
 	status = "disabled";
 };
 
+&usb_otg {
+	dr_mode = "otg";
+	status = "okay";
+};
+
+
 &usbphy {
-	/* USB Type-A port's VBUS is always on */
-	usb0_id_det-gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>; /* PG12 */
-	usb0_vbus-supply = <&reg_usb0_vbus>;
 	status = "okay";
 };
