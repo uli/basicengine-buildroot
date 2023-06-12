@@ -81,18 +81,15 @@
 	leds {
 		compatible = "gpio-leds";
 
-		/* XXX: no idea how correct these are, but the multi-color
-		   LED turns from purple to red on boot. */
-		/* XXX: colors are wrong */
 		pwr_led {
-			label = "r69:green:pwr";
-			gpios = <&r_pio 0 10 GPIO_ACTIVE_HIGH>;
+			label = "r69:blue:pwr";
+			gpios = <&r_pio 0 10 GPIO_ACTIVE_LOW>;
 			default-state = "on";
 		};
 
 		status_led {
 			label = "r69:red:status";
-			gpios = <&pio 0 15 GPIO_ACTIVE_HIGH>;
+			gpios = <&pio 0 15 GPIO_ACTIVE_LOW>;
 		};
 	};
 
