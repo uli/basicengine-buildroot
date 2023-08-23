@@ -1,0 +1,85 @@
+diff -urU0 a/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts b/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts
+--- a/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts	2020-03-29 22:25:41.000000000 +0000
++++ b/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts	2020-04-10 13:57:47.648258702 +0000
+@@ -166,3 +166,7 @@
+ 	/* USB VBUS is always on */
+ 	status = "okay";
+ };
++
++&ve {
++	status = "okay";
++};
+diff -urU0 a/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts b/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts
+--- a/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts	2020-03-29 22:25:41.000000000 +0000
++++ b/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts	2020-04-10 13:58:51.014001309 +0000
+@@ -201,3 +201,7 @@
+ 	usb0_vbus-supply = <&reg_usb0_vbus>;
+ 	status = "okay";
+ };
++
++&ve {
++	status = "okay";
++};
+diff -urU0 a/arch/arm/boot/dts/sun8i-h3.dtsi b/arch/arm/boot/dts/sun8i-h3.dtsi
+--- a/arch/arm/boot/dts/sun8i-h3.dtsi	2020-03-29 22:25:41.000000000 +0000
++++ b/arch/arm/boot/dts/sun8i-h3.dtsi	2020-04-10 13:57:18.577294849 +0000
+@@ -128,6 +128,20 @@
+ 			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+ 	};
+ 
++        reserved-memory {
++                #address-cells = <1>;
++                #size-cells = <1>;
++                ranges;
++
++                cma_pool: default-pool {
++                        compatible = "shared-dma-pool";
++                        size = <0x6000000>;
++                        alloc-ranges = <0x4a000000 0x6000000>;
++                        reusable;
++                        linux,cma-default;
++                };
++        };
++
+ 	soc {
+ 		deinterlace: deinterlace@1400000 {
+ 			compatible = "allwinner,sun8i-h3-deinterlace";
+@@ -143,7 +157,7 @@
+ 		};
+ 
+ 		syscon: system-control@1c00000 {
+-			compatible = "allwinner,sun8i-h3-system-control";
++			compatible = "allwinner,sun8i-h3-system-control","syscon";
+ 			reg = <0x01c00000 0x1000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+@@ -164,7 +178,7 @@
+ 			};
+ 		};
+ 
+-		video-codec@1c0e000 {
++		/*video-codec@1c0e000 {
+ 			compatible = "allwinner,sun8i-h3-video-engine";
+ 			reg = <0x01c0e000 0x1000>;
+ 			clocks = <&ccu CLK_BUS_VE>, <&ccu CLK_VE>,
+@@ -173,6 +187,20 @@
+ 			resets = <&ccu RST_BUS_VE>;
+ 			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
+ 			allwinner,sram = <&ve_sram 1>;
++		};*/
++
++		ve: video-engine@01c0e000 {
++			compatible = "allwinner,sunxi-cedar-ve";
++			reg = <0x01c0e000 0x1000>,
++			      <0x01c00000 0x10>,
++			      <0x01c20000 0x800>;
++			memory-region = <&cma_pool>;
++			syscon = <&syscon>;
++			clocks = <&ccu CLK_BUS_VE>, <&ccu CLK_VE>,
++			         <&ccu CLK_DRAM_VE>;
++			clock-names = "ahb", "mod", "ram";
++			resets = <&ccu RST_BUS_VE>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
+ 		crypto: crypto@1c15000 {

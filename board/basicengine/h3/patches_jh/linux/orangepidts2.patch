@@ -1,0 +1,55 @@
+diff -ru -x '*.tmp' -x '*.o' -x '*.cmd' -x '*.order' -x '*.a' -x '*.mod.c' -x '*.ko' -x '*.mod' -x '*.dtb' linux-custom/arch/arm/boot/dts/sun8i-h3.dtsi linux-custom-new/arch/arm/boot/dts/sun8i-h3.dtsi
+--- linux-custom/arch/arm/boot/dts/sun8i-h3.dtsi	2023-08-23 17:18:44.609598682 +0200
++++ linux-custom-new/arch/arm/boot/dts/sun8i-h3.dtsi	2023-08-23 17:30:26.242958095 +0200
+@@ -156,8 +156,9 @@
+ 
+                 cma_pool: default-pool {
+                         compatible = "shared-dma-pool";
+-                        size = <0x6000000>;
+-                        alloc-ranges = <0x4a000000 0x6000000>;
++			alignment = <0x2000>;
++                        size = <0x4400000>;
++                        alloc-ranges = <0x40000000 0xa000000>;
+                         reusable;
+                         linux,cma-default;
+                 };
+@@ -220,6 +221,9 @@
+ 			clocks = <&ccu CLK_BUS_VE>, <&ccu CLK_VE>,
+ 			         <&ccu CLK_DRAM_VE>;
+ 			clock-names = "ahb", "mod", "ram";
++			assigned-clocks = <&ccu CLK_VE>;
++			assigned-clock-rates = <32000000>;
++
+ 			resets = <&ccu RST_BUS_VE>;
+ 			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+@@ -357,3 +361,7 @@
+ &sid {
+ 	compatible = "allwinner,sun8i-h3-sid";
+ };
++
++&ve {
++	status = "okay";
++};
+diff -ru -x '*.tmp' -x '*.o' -x '*.cmd' -x '*.order' -x '*.a' -x '*.mod.c' -x '*.ko' -x '*.mod' -x '*.dtb' linux-custom/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts linux-custom-new/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts
+--- linux-custom/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts	2023-08-23 17:18:44.436574179 +0200
++++ linux-custom-new/arch/arm/boot/dts/sun8i-h3-orangepi-lite.dts	2023-08-23 17:30:36.587422991 +0200
+@@ -166,7 +166,3 @@
+ 	/* USB VBUS is always on */
+ 	status = "okay";
+ };
+-
+-&ve {
+-	status = "okay";
+-};
+diff -ru -x '*.tmp' -x '*.o' -x '*.cmd' -x '*.order' -x '*.a' -x '*.mod.c' -x '*.ko' -x '*.mod' -x '*.dtb' linux-custom/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts linux-custom-new/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts
+--- linux-custom/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts	2023-08-23 17:18:44.520586077 +0200
++++ linux-custom-new/arch/arm/boot/dts/sun8i-h3-orangepi-one.dts	2023-08-23 17:30:43.076341897 +0200
+@@ -201,7 +201,3 @@
+ 	usb0_vbus-supply = <&reg_usb0_vbus>;
+ 	status = "okay";
+ };
+-
+-&ve {
+-	status = "okay";
+-};
