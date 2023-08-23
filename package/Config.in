@@ -468,6 +468,7 @@ endmenu
 	source "package/cbootimage/Config.in"
 	source "package/cc-tool/Config.in"
 	source "package/cdrkit/Config.in"
+	source "package/cedar/Config.in"
 	source "package/cpuburn-arm/Config.in"
 	source "package/crucible/Config.in"
 	source "package/cryptsetup/Config.in"
