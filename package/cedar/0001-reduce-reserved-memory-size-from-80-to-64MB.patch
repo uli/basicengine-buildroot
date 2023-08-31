@@ -1,10 +1,10 @@
 From c5442f9c7ce07720abd854d5e60580f173fdc0f0 Mon Sep 17 00:00:00 2001
 From: Ulrich Hecht <uli@basicengine.org>
 Date: Wed, 23 Aug 2023 17:38:56 +0200
-Subject: [PATCH] reduce reserved memory size from 80 to 64MB
+Subject: [PATCH] reduce reserved memory size from 80 to 16MB
 
-Seems to work just as well, even for 1920x1080. Might be possible to
-reduce it further.
+Seems to work just as well, even for 1920x1080. 8 MB is too small.
+
 ---
  cedar_ve.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -18,7 +18,7 @@ index 3348f54..d18dbce 100644
  
  #if !defined(USE_ION)
 -	cedar_devp->ve_size = 80 * SZ_1M;
-+	cedar_devp->ve_size = 64 * SZ_1M;
++	cedar_devp->ve_size = 16 * SZ_1M;
  	dma_set_coherent_mask(cedar_devp->dev, 0xFFFFFFFF);
  	cedar_devp->ve_start_virt = dma_alloc_coherent(cedar_devp->dev, cedar_devp->ve_size,
  												   &cedar_devp->ve_start_pa,
