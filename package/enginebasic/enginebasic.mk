@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-ENGINEBASIC_VERSION = nextgen_jh
+ENGINEBASIC_VERSION = jh
 ENGINEBASIC_SITE = $(call github,uli,basicengine-firmware,$(ENGINEBASIC_VERSION))
 ENGINEBASIC_LICENSE = GPL-3.0+
 ENGINEBASIC_LICENSE_FILES = README.md
