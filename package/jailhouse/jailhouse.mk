@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-JAILHOUSE_VERSION = next
-JAILHOUSE_SITE = $(call github,siemens,jailhouse,$(JAILHOUSE_VERSION))
+JAILHOUSE_VERSION = basic
+JAILHOUSE_SITE = $(call github,uli,jailhouse,$(JAILHOUSE_VERSION))
 JAILHOUSE_LICENSE = GPL-2.0
 JAILHOUSE_LICENSE_FILES = COPYING
 JAILHOUSE_DEPENDENCIES = \
