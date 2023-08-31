@@ -23,7 +23,7 @@ define HOST_ALLWINNER_BARE_METAL_TOOLCHAIN_CONFIGURE_CMDS
 	sed -e "s,^.*CT_PREFIX_DIR=.*$$,CT_PREFIX_DIR=\"$(HOST_DIR)/x-tools\"," \
 	    -e "s,^.*CT_LOCAL_TARBALLS_DIR.*$$,CT_LOCAL_TARBALLS_DIR=\"$(CONFIG_DIR)/dl\"," \
 	    -e "s,^.*CT_TARBALLS_BUILDROOT_LAYOUT.*$$,CT_TARBALLS_BUILDROOT_LAYOUT=y," \
-	    <$(CONFIG_DIR)/package/allwinner-bare-metal-toolchain/crosstool-ng.config >$(@D)/.config
+	    <$(HOST_ALLWINNER_BARE_METAL_TOOLCHAIN_PKGDIR)/crosstool-ng.config >$(@D)/.config
 endef
 
 define HOST_ALLWINNER_BARE_METAL_TOOLCHAIN_BUILD_CMDS
