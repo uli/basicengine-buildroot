@@ -19,7 +19,7 @@ HOST_ALLWINNER_BARE_METAL_TOOLCHAIN_MAKE_OPTS = \
 #	DESTDIR="$(TARGET_DIR)"
 
 define HOST_ALLWINNER_BARE_METAL_TOOLCHAIN_CONFIGURE_CMDS
-	cd $(@D) ; ./bootstrap ; $(HOST_MAKE_ENV) ./configure --enable-local && $(HOST_MAKE_ENV) $(MAKE)
+	cd $(@D) ; $(HOST_MAKE_ENV) ./bootstrap ; $(HOST_MAKE_ENV) ./configure --enable-local && $(HOST_MAKE_ENV) $(MAKE)
 	sed -e "s,^.*CT_PREFIX_DIR=.*$$,CT_PREFIX_DIR=\"$(HOST_DIR)/x-tools\"," \
 	    -e "s,^.*CT_LOCAL_TARBALLS_DIR.*$$,CT_LOCAL_TARBALLS_DIR=\"$(CONFIG_DIR)/dl\"," \
 	    -e "s,^.*CT_TARBALLS_BUILDROOT_LAYOUT.*$$,CT_TARBALLS_BUILDROOT_LAYOUT=y," \
