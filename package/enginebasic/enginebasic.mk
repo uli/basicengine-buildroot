@@ -22,7 +22,7 @@ define ENGINEBASIC_CONFIGURE_CMDS
     	DEMOS_DIR=$(@D)/demos JAILHOUSE=1 ./configure.sh
     mkdir -p $(@D)/.git ; touch $(@D)/.git/index
     cd $(@D) ; ninja -f build.ninja.h3 ttbasic/version.h
-    echo "#define STR_VARSION \"$(shell git -C $(ENGINEBASIC_DL_DIR)/git describe --abbrev=4 --dirty --always --tags)\"" >$(@D)/ttbasic/version.h
+    echo "#define STR_VARSION \"$(shell git -C $(@D) describe --abbrev=4 --always --tags)\"" >$(@D)/ttbasic/version.h
 endef
 
 define ENGINEBASIC_BUILD_CMDS
