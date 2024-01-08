@@ -12,10 +12,11 @@ HOST_ALLWINNER_BARE_METAL_DEPENDENCIES = \
 	host-allwinner-bare-metal-toolchain host-ninja sdl2
 
 define HOST_ALLWINNER_BARE_METAL_CONFIGURE_CMDS
-	cd $(@D) ; JAILHOUSE=1 \
+	cd $(@D) ; JAILHOUSE=1 GDBSTUB=on \
 		CROSS_COMPILE="$(HOST_DIR)/x-tools/bin/arm-unknown-eabihf-" \
 		JAILHOUSE_CC="$(TARGET_CC)" \
 		JAILHOUSE_SYSROOT="$(STAGING_DIR)" \
+		PLATFORM="$(BR2_PACKAGE_ALLWINNER_BARE_METAL_PLATFORM)" \
 		./configure.sh
 endef
 
