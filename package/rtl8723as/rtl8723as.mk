@@ -24,11 +24,11 @@ define RTL8723AS_LINUX_CONFIG_FIXUPS
 endef
 
 define RTL8723AS_BUILD_CMDS
-	cd $(@D) ; ARCH=arm make CROSS_COMPILE=$(HOST_DIR)/bin/arm-buildroot-linux-gnueabihf- KSRC=$(LINUX_DIR) -j12
+	cd $(@D) ; make ARCH=$(NORMALIZED_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" KSRC=$(LINUX_DIR) -j12
 endef
 
 define RTL8723AS_INSTALL_TARGET_CMDS
-	cd $(@D) ; ARCH=arm make CROSS_COMPILE=$(HOST_DIR)/bin/arm-buildroot-linux-gnueabihf- KSRC=$(LINUX_DIR) install MODDESTDIR=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/extra
+	cd $(@D) ; make ARCH=$(NORMALIZED_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" KSRC=$(LINUX_DIR) install MODDESTDIR=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/extra
 endef
 
 #$(eval $(kernel-module))
