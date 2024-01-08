@@ -134,6 +134,7 @@ GDB_CONF_OPTS = \
 	--with-system-zlib \
 	--disable-werror \
 	--enable-static \
+	--target=arm-buildroot-linux-gnueabihf \
 	--without-mpfr
 
 ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
@@ -243,7 +244,7 @@ endif
 #    host build.
 #  * --enable-static because gdb really wants to use libbfd.a
 HOST_GDB_CONF_OPTS = \
-	--target=$(GNU_TARGET_NAME) \
+	--target=arm-buildroot-linux-gnueabihf \
 	--enable-static \
 	--without-uiout \
 	--disable-gdbtk \
