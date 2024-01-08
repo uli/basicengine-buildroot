@@ -32,13 +32,13 @@ endif
 
 define JAILHOUSE_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)
-
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR) M=$(@D)/inmates CROSS_COMPILE=$(HOST_DIR)/x-tools/bin/arm-unknown-eabihf- ARCH=arm $(@D)/inmates
 	$(if $(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS), \
 		cd $(@D) && $(PKG_PYTHON_SETUPTOOLS_ENV) $(HOST_DIR)/bin/python setup.py build)
 endef
 
 define JAILHOUSE_INSTALL_TARGET_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D) modules_install firmware_install tool_inmates_install
+	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D) modules_install firmware_install
 	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)/tools src=$(@D)/tools install
 	mv $(TARGET_DIR)/usr/local/sbin/{jailhouse,ivshmem-demo} $(TARGET_DIR)/usr/sbin/
 	rm -fr $(TARGET_DIR)/usr/local/man
