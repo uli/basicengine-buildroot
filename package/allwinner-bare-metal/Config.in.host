@@ -1,0 +1,3 @@
+config BR2_PACKAGE_ALLWINNER_BARE_METAL_PLATFORM
+	string "allwinner-bare-metal platform"
+	default "h3"
