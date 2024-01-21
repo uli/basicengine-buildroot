@@ -1,0 +1,26 @@
+From f221af90516c24cfbb349a0825e6b338f24a9a10 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Wed, 13 Dec 2023 06:53:49 +0100
+Subject: [PATCH] skip inmates build
+
+---
+ Kbuild | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Kbuild b/Kbuild
+index 2258a62c..ddec67f3 100644
+--- a/Kbuild
++++ b/Kbuild
+@@ -56,7 +56,8 @@ $(GEN_PCI_DEFS_PY): $(src)/scripts/gen_pci_defs.sh $(src)/include/jailhouse/pci_
+ 
+ targets += pyjailhouse/pci_defs.py
+ 
+-subdir-y := hypervisor configs inmates tools
++#subdir-y := hypervisor configs inmates tools
++subdir-y := hypervisor configs tools
+ 
+ obj-m := driver/
+ 
+-- 
+2.39.2
+
