@@ -36,6 +36,7 @@ define ENGINEBASIC_INSTALL_TARGET_CMDS
     mkdir -p $(TARGET_DIR)/sd
     mkdir -p $(TARGET_DIR)/usr/share/enginebasic
     mkdir -p $(@D)/init_dir/sys/etc/dropbear
+    mkdir -p $(@D)/init_dir/sys/etc/seedrng
     tar -C $(@D)/init_dir -czf $(TARGET_DIR)/usr/share/enginebasic/basic_sys.tar.gz .
 endef
 
