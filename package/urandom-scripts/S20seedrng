@@ -23,7 +23,7 @@
 #
 
 DAEMON="seedrng"
-SEEDRNG_ARGS=""
+SEEDRNG_ARGS="--seed-dir=/sd/sys/etc/seedrng"
 
 # shellcheck source=/dev/null
 [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
