@@ -1,0 +1,7 @@
+# uboot config		Linux device tree
+x96_q_lpddr3		sun50i-h313-x96-q-lpddr3
+x96_q_ddr3		sun50i-h313-x96q
+tanix_tx6s		sun50i-h616-tanix-tx6s
+tanix_tx6s_axp313	sun50i-h616-tanix-tx6s-axp313
+orangepi_zero2		sun50i-h616-orangepi-zero2
+orangepi_zero3		sun50i-h616-orangepi-zero3
