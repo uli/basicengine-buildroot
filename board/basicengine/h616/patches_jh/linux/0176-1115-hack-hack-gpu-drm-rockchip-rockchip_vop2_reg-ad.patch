@@ -1,0 +1,44 @@
+From f39b686d278413b3f47ab4381f230750677f7e05 Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:24:57 +0100
+Subject: [PATCH 176/184] 
+ 1115-hack-hack-gpu-drm-rockchip-rockchip_vop2_reg-add-rk3528.patch
+
+---
+ drivers/gpu/drm/rockchip/rockchip_vop2_reg.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+index 9bf0637bf..e3463cd45 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
++++ b/drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+@@ -225,6 +225,16 @@ static const struct vop2_win_data rk3568_vop_win_data[] = {
+ 	},
+ };
+ 
++static const struct vop2_data rk3528_vop = {
++	.nr_vps = 2,
++	.max_input = { 4096, 2304 },
++	.max_output = { 4096, 2304 },
++	.vp = rk3568_vop_video_ports,
++	.win = rk3568_vop_win_data,
++	.win_size = ARRAY_SIZE(rk3568_vop_win_data),
++	.soc_id = 3566,
++};
++
+ static const struct vop2_data rk3566_vop = {
+ 	.nr_vps = 3,
+ 	.max_input = { 4096, 2304 },
+@@ -247,6 +257,9 @@ static const struct vop2_data rk3568_vop = {
+ 
+ static const struct of_device_id vop2_dt_match[] = {
+ 	{
++		.compatible = "rockchip,rk3528-vop",
++		.data = &rk3528_vop,
++	}, {
+ 		.compatible = "rockchip,rk3566-vop",
+ 		.data = &rk3566_vop,
+ 	}, {
+-- 
+2.39.2
+

@@ -1,0 +1,32 @@
+From 9d9eccdbfd18dd2cfe59b8c065085144f5fd4e09 Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:24:04 +0100
+Subject: [PATCH 138/184] 0614-clk-sunxi-ng-ccu-sun6i-rtc-fix-32k-clk.patch
+
+---
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+index d65398497..4e980e987 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
++++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+@@ -269,13 +269,13 @@ static struct ccu_mux osc32k_fanout_clk = {
+ };
+ 
+ static struct ccu_common *sun6i_rtc_ccu_clks[] = {
++	&osc32k_clk.common,
++	&osc32k_fanout_clk.common,
+ 	&iosc_clk,
+ 	&iosc_32k_clk,
+ 	&ext_osc32k_gate_clk.common,
+-	&osc32k_clk.common,
+ 	&osc24M_32k_clk.common,
+ 	&rtc_32k_clk.common,
+-	&osc32k_fanout_clk.common,
+ };
+ 
+ static struct clk_hw_onecell_data sun6i_rtc_ccu_hw_clks = {
+-- 
+2.39.2
+

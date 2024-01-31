@@ -1,0 +1,43 @@
+From 93d066954ab5a9eff08aa273beeed12aab8e69d7 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Wed, 4 Oct 2023 17:36:11 +0200
+Subject: [PATCH 009/184] 0602-media-cedrus-add-H616-variant.patch
+
+---
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index d2419319a..e9aeac080 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -645,6 +645,15 @@ static const struct cedrus_variant sun50i_h6_cedrus_variant = {
+ 	.mod_rate	= 600000000,
+ };
+ 
++static const struct cedrus_variant sun50i_h616_cedrus_variant = {
++	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
++			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_H264_DEC |
++			  CEDRUS_CAPABILITY_H265_DEC |
++			  CEDRUS_CAPABILITY_VP8_DEC,
++	.mod_rate	= 600000000,
++};
++
+ static const struct of_device_id cedrus_dt_match[] = {
+ 	{
+ 		.compatible = "allwinner,sun4i-a10-video-engine",
+@@ -690,6 +699,10 @@ static const struct of_device_id cedrus_dt_match[] = {
+ 		.compatible = "allwinner,sun50i-h6-video-engine",
+ 		.data = &sun50i_h6_cedrus_variant,
+ 	},
++	{
++		.compatible = "allwinner,sun50i-h616-video-engine",
++		.data = &sun50i_h6_cedrus_variant,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, cedrus_dt_match);
+-- 
+2.39.2
+

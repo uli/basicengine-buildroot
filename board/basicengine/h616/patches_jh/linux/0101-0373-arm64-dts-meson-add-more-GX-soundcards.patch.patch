@@ -1,0 +1,217 @@
+From 008a32b55dfa55978922b1cc398d063ac8abd91c Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:23:10 +0100
+Subject: [PATCH 101/184] 0373-arm64-dts-meson-add-more-GX-soundcards.patch
+
+Add initial support is limited to HDMI i2s and SPDIF (LPCM).
+
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+---
+ .../boot/dts/amlogic/meson-gxm-nexbox-a1.dts  | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+---
+ .../boot/dts/amlogic/meson-gxbb-p200.dts      | 61 +++++++++++++++++++
+ .../boot/dts/amlogic/meson-gxbb-p201.dts      | 40 ++++++++++++
+ .../dts/amlogic/meson-gxl-s905x-p212.dtsi     | 40 ++++++++++++
+ 3 files changed, 141 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts
+index 3c93d1898..27b3ab20f 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts
+@@ -9,11 +9,19 @@
+ 
+ #include "meson-gxbb-p20x.dtsi"
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/sound/meson-aiu.h>
+ 
+ / {
+ 	compatible = "amlogic,p200", "amlogic,meson-gxbb";
+ 	model = "Amlogic Meson GXBB P200 Development Board";
+ 
++	spdif_dit: audio-codec-0 {
++		#sound-dai-cells = <0>;
++		compatible = "linux,spdif-dit";
++		status = "okay";
++		sound-name-prefix = "DIT";
++	};
++
+ 	avdd18_usb_adc: regulator-avdd18_usb_adc {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "AVDD18_USB_ADC";
+@@ -57,6 +65,59 @@ button-menu {
+ 			press-threshold-microvolt = <0>; /* 0% */
+ 		};
+ 	};
++
++	sound {
++		compatible = "amlogic,gx-sound-card";
++		model = "P200";
++		assigned-clocks = <&clkc CLKID_MPLL0>,
++				  <&clkc CLKID_MPLL1>,
++				  <&clkc CLKID_MPLL2>;
++		assigned-clock-parents = <0>, <0>, <0>;
++		assigned-clock-rates = <294912000>,
++				       <270950400>,
++				       <393216000>;
++		status = "okay";
++
++		dai-link-0 {
++			sound-dai = <&aiu AIU_CPU CPU_I2S_FIFO>;
++		};
++
++		dai-link-1 {
++			sound-dai = <&aiu AIU_CPU CPU_SPDIF_FIFO>;
++		};
++
++		dai-link-2 {
++			sound-dai = <&aiu AIU_CPU CPU_I2S_ENCODER>;
++			dai-format = "i2s";
++			mclk-fs = <256>;
++
++			codec-0 {
++				sound-dai = <&aiu AIU_HDMI CTRL_I2S>;
++			};
++		};
++
++		dai-link-3 {
++			sound-dai = <&aiu AIU_CPU CPU_SPDIF_ENCODER>;
++
++			codec-0 {
++				sound-dai = <&spdif_dit>;
++			};
++		};
++
++		dai-link-4 {
++			sound-dai = <&aiu AIU_HDMI CTRL_OUT>;
++
++			codec-0 {
++				sound-dai = <&hdmi_tx>;
++			};
++		};
++	};
++};
++
++&aiu {
++	status = "okay";
++	pinctrl-0 = <&spdif_out_y_pins>;
++	pinctrl-names = "default";
+ };
+ 
+ &ethmac {
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts
+index 150a82f3b..22bd00701 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts
+@@ -8,10 +8,50 @@
+ /dts-v1/;
+ 
+ #include "meson-gxbb-p20x.dtsi"
++#include <dt-bindings/sound/meson-aiu.h>
+ 
+ / {
+ 	compatible = "amlogic,p201", "amlogic,meson-gxbb";
+ 	model = "Amlogic Meson GXBB P201 Development Board";
++
++	sound {
++		compatible = "amlogic,gx-sound-card";
++		model = "P201";
++		assigned-clocks = <&clkc CLKID_MPLL0>,
++				  <&clkc CLKID_MPLL1>,
++				  <&clkc CLKID_MPLL2>;
++		assigned-clock-parents = <0>, <0>, <0>;
++		assigned-clock-rates = <294912000>,
++				       <270950400>,
++				       <393216000>;
++		status = "okay";
++
++		dai-link-0 {
++			sound-dai = <&aiu AIU_CPU CPU_I2S_FIFO>;
++		};
++
++		dai-link-1 {
++			sound-dai = <&aiu AIU_CPU CPU_I2S_ENCODER>;
++			dai-format = "i2s";
++			mclk-fs = <256>;
++
++			codec-0 {
++				sound-dai = <&aiu AIU_HDMI CTRL_I2S>;
++			};
++		};
++
++		dai-link-2 {
++			sound-dai = <&aiu AIU_HDMI CTRL_OUT>;
++
++			codec-0 {
++				sound-dai = <&hdmi_tx>;
++			};
++		};
++	};
++};
++
++&aiu {
++	status = "okay";
+ };
+ 
+ &ethmac {
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
+index 05cb2f5e5..5d41d93bd 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
+@@ -11,6 +11,7 @@
+ /* Common DTSI for devices which are based on the P212 reference board. */
+ 
+ #include "meson-gxl-s905x.dtsi"
++#include <dt-bindings/sound/meson-aiu.h>
+ 
+ / {
+ 	aliases {
+@@ -85,6 +86,45 @@ sdio_pwrseq: sdio-pwrseq {
+ 		clocks = <&wifi32k>;
+ 		clock-names = "ext_clock";
+ 	};
++
++	sound {
++		compatible = "amlogic,gx-sound-card";
++		model = "S905X-P212";
++		assigned-clocks = <&clkc CLKID_MPLL0>,
++				  <&clkc CLKID_MPLL1>,
++				  <&clkc CLKID_MPLL2>;
++		assigned-clock-parents = <0>, <0>, <0>;
++		assigned-clock-rates = <294912000>,
++				       <270950400>,
++				       <393216000>;
++		status = "okay";
++
++		dai-link-0 {
++			sound-dai = <&aiu AIU_CPU CPU_I2S_FIFO>;
++		};
++
++		dai-link-1 {
++			sound-dai = <&aiu AIU_CPU CPU_I2S_ENCODER>;
++			dai-format = "i2s";
++			mclk-fs = <256>;
++
++			codec-0 {
++				sound-dai = <&aiu AIU_HDMI CTRL_I2S>;
++			};
++		};
++
++		dai-link-2 {
++			sound-dai = <&aiu AIU_HDMI CTRL_OUT>;
++
++			codec-0 {
++				sound-dai = <&hdmi_tx>;
++			};
++		};
++	};
++};
++
++&aiu {
++	status = "okay";
+ };
+ 
+ &ethmac {
+-- 
+2.39.2
+

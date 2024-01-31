@@ -1,0 +1,82 @@
+From 445a631ba29c07807ff675eaf37f292c15b84032 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Wed, 4 Oct 2023 17:36:10 +0200
+Subject: [PATCH 007/184] 0600-drivers-h616-wip-add-usb-emac2-support.patch
+
+---
+ drivers/base/core.c                               |  2 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 12 ++++++++++--
+ drivers/phy/allwinner/phy-sun4i-usb.c             |  2 +-
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index af90bfb0c..cc5834104 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -1700,7 +1700,7 @@ static void device_links_purge(struct device *dev)
+ #define FW_DEVLINK_FLAGS_RPM		(FW_DEVLINK_FLAGS_ON | \
+ 					 DL_FLAG_PM_RUNTIME)
+ 
+-static u32 fw_devlink_flags = FW_DEVLINK_FLAGS_ON;
++static u32 fw_devlink_flags = FW_DEVLINK_FLAGS_PERMISSIVE;
+ static int __init fw_devlink_setup(char *arg)
+ {
+ 	if (!arg)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+index f83447259..e2f398f40 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+@@ -1137,11 +1137,13 @@ static int sun8i_dwmac_probe(struct platform_device *pdev)
+ 	struct stmmac_resources stmmac_res;
+ 	struct sunxi_priv_data *gmac;
+ 	struct device *dev = &pdev->dev;
++	struct reg_field syscon_field;
+ 	phy_interface_t interface;
+ 	int ret;
+ 	struct stmmac_priv *priv;
+ 	struct net_device *ndev;
+ 	struct regmap *regmap;
++	u32 syscon_idx = 0;
+ 
+ 	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
+ 	if (ret)
+@@ -1193,8 +1195,12 @@ static int sun8i_dwmac_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	gmac->regmap_field = devm_regmap_field_alloc(dev, regmap,
+-						     *gmac->variant->syscon_field);
++	syscon_field = *gmac->variant->syscon_field;
++	ret = of_property_read_u32_index(pdev->dev.of_node, "syscon", 1,
++					 &syscon_idx);
++	if (!ret)
++		syscon_field.reg += syscon_idx * sizeof(u32);
++	gmac->regmap_field = devm_regmap_field_alloc(dev, regmap, syscon_field);
+ 	if (IS_ERR(gmac->regmap_field)) {
+ 		ret = PTR_ERR(gmac->regmap_field);
+ 		dev_err(dev, "Unable to map syscon register: %d\n", ret);
+@@ -1323,6 +1329,8 @@ static const struct of_device_id sun8i_dwmac_match[] = {
+ 		.data = &emac_variant_a64 },
+ 	{ .compatible = "allwinner,sun50i-h6-emac",
+ 		.data = &emac_variant_h6 },
++	{ .compatible = "allwinner,sun50i-h616-emac",
++		.data = &emac_variant_h6 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, sun8i_dwmac_match);
+diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
+index 5472db9e8..ee4a4f123 100644
+--- a/drivers/phy/allwinner/phy-sun4i-usb.c
++++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+@@ -847,7 +847,7 @@ static int sun4i_usb_phy_probe(struct platform_device *pdev)
+ 		}
+ 
+ 		snprintf(name, sizeof(name), "usb%d_reset", i);
+-		phy->reset = devm_reset_control_get(dev, name);
++		phy->reset = devm_reset_control_get_shared(dev, name);
+ 		if (IS_ERR(phy->reset)) {
+ 			dev_err(dev, "failed to get reset %s\n", name);
+ 			return PTR_ERR(phy->reset);
+-- 
+2.39.2
+

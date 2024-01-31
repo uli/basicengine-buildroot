@@ -1,0 +1,26 @@
+From 3cd3793d6404ac242ae502a29cf1fdfadda749e6 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Wed, 24 Jan 2024 07:02:46 +0100
+Subject: [PATCH 183/184] arm64: dts: allwinner: sun50i-h313-x96-q-lpddr3.dts:
+ make usbotg a host port
+
+---
+ arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q-lpddr3.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q-lpddr3.dts b/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q-lpddr3.dts
+index e2821646b..62bc6e47c 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q-lpddr3.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h313-x96-q-lpddr3.dts
+@@ -271,7 +271,7 @@ bluetooth {
+ };
+ 
+ &usbotg {
+-	dr_mode = "peripheral";
++	dr_mode = "host";
+ 	status = "okay";
+ };
+ 
+-- 
+2.39.2
+

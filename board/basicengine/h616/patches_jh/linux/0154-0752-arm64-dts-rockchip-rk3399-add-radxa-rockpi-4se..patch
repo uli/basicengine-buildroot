@@ -1,0 +1,81 @@
+From df210f168967aa9bb5692cb5a5ea7aa2888aab36 Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:24:18 +0100
+Subject: [PATCH 154/184] 
+ 0752-arm64-dts-rockchip-rk3399-add-radxa-rockpi-4se.patch
+
+---
+ arch/arm64/boot/dts/rockchip/Makefile         |  1 +
+ .../boot/dts/rockchip/rk3399-rock-pi-4se.dts  | 48 +++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4se.dts
+
+diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+index 8c15593c0..eb93ed58e 100644
+--- a/arch/arm64/boot/dts/rockchip/Makefile
++++ b/arch/arm64/boot/dts/rockchip/Makefile
+@@ -55,6 +55,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4a-plus.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4b.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4b-plus.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4c.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4se.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock960.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64-v2.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4se.dts b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4se.dts
+new file mode 100644
+index 000000000..b70a74b84
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4se.dts
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2019 Akash Gajjar <Akash_Gajjar@mentor.com>
++ * Copyright (c) 2019 Pragnesh Patel <Pragnesh_Patel@mentor.com>
++ */
++
++/dts-v1/;
++#include "rk3399-rock-pi-4.dtsi"
++
++/ {
++	model = "Radxa ROCK Pi 4SE";
++	compatible = "radxa,rockpi4se", "radxa,rockpi4", "rockchip,rk3399";
++
++	aliases {
++		mmc2 = &sdio0;
++	};
++};
++
++&sdio0 {
++	status = "okay";
++
++	brcmf: wifi@1 {
++		reg = <1>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "host-wake";
++		pinctrl-names = "default";
++		pinctrl-0 = <&wifi_host_wake_l>;
++	};
++};
++
++&uart0 {
++	status = "okay";
++
++	bluetooth {
++		compatible = "brcm,bcm4345c5";
++		clocks = <&rk808 1>;
++		clock-names = "lpo";
++		device-wakeup-gpios = <&gpio2 RK_PD3 GPIO_ACTIVE_HIGH>;
++		host-wakeup-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_HIGH>;
++		shutdown-gpios = <&gpio0 RK_PB1 GPIO_ACTIVE_HIGH>;
++		max-speed = <1500000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
++		vbat-supply = <&vcc3v3_sys>;
++		vddio-supply = <&vcc_1v8>;
++	};
++};
+-- 
+2.39.2
+

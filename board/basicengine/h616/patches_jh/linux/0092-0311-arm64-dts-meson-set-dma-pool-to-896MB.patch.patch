@@ -1,0 +1,26 @@
+From cf2bfb897206a2b48a7466befd31492ba28e23fd Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:23:02 +0100
+Subject: [PATCH 092/184] 0311-arm64-dts-meson-set-dma-pool-to-896MB.patch
+
+This change sets the CMA pool to a larger 896MB! value for (WIP) vdec use
+---
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+index 80d86780c..7f20b90e1 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+@@ -58,7 +58,7 @@ secmon_reserved_bl32: secmon@5300000 {
+ 		linux,cma {
+ 			compatible = "shared-dma-pool";
+ 			reusable;
+-			size = <0x0 0x10000000>;
++			size = <0x0 0x38000000>;
+ 			alignment = <0x0 0x400000>;
+ 			linux,cma-default;
+ 		};
+-- 
+2.39.2
+
