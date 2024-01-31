@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_PYTHON_POLIB
+	bool "host python-polib"
+	help
+	  A library to manipulate gettext files (po and mo files).
+
+	  https://pypi.python.org/pypi/polib
