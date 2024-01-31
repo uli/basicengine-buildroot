@@ -8,7 +8,7 @@ ENGINEBASIC_VERSION = jh
 ENGINEBASIC_SITE = $(call github,uli,basicengine-firmware,$(ENGINEBASIC_VERSION))
 ENGINEBASIC_LICENSE = GPL-3.0+
 ENGINEBASIC_LICENSE_FILES = README.md
-ENGINEBASIC_DEPENDENCIES = host-allwinner-bare-metal host-ninja
+ENGINEBASIC_DEPENDENCIES = host-allwinner-bare-metal host-ninja host-python-polib
 
 ENGINEBASIC_EXTRA_DOWNLOADS += \
 	$(call github,uli,basicengine-demos,refs/heads/master.tar.gz)
