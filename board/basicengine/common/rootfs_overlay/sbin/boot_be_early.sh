@@ -1,4 +1,13 @@
 #!/bin/sh
+
+# check if we already run successfully earlier
+lsmod|grep -q jailhouse && exit 0
+
+# Wait because mkfs may take a bit longer on old media, and BASIC may start
+# before it's finished, displaying a misleading "partitioning" message and
+# staying there.
+test -e /make_vfat && exit 0
+
 JH_PLATFORM=orangepi0
 test -e /sbin/boot_be_platform.sh && . /sbin/boot_be_platform.sh
 
