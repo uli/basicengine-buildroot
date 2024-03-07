@@ -26,6 +26,13 @@ config BR2_PACKAGE_UTIL_LINUX_LIBFDISK
 	help
 	  Install libfdisk.
 
+config BR2_PACKAGE_UTIL_LINUX_FDISKS
+	bool "fdisks"
+	depends on BR2_USE_MMU # fork()
+	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
+	help
+	  Install fdisk, sfdisk etc.
+
 config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
 	bool "libmount"
 	depends on BR2_USE_MMU # fork()
