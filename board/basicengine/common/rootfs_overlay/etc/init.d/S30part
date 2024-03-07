@@ -20,22 +20,7 @@ case "$1" in
   start)
   	echo "Mounting data partition: "
   	if test ! -e ${data_part} ; then
-  		# The "2048" is there is coerce fdisk to make a reasonable
-  		# suggestion for the start sector. If we don't do that, it
-  		# will create a 1 MB partition in the gap before partition
-  		# 1...
-	  	fdisk ${root_device} <<EOT
-n
-p
-${data_part_no}
-2048
-
-
-t
-${data_part_no}
-c
-w
-EOT
+  		echo 'type=c'|sfdisk -a --no-reread ${root_device}
 		mount -o remount,rw /
 		touch /make_vfat
 		/sbin/reboot
