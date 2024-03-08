@@ -10,7 +10,7 @@ TINYCC_LICENSE = LGPL-2.1+
 TINYCC_LICENSE_FILES = COPYING
 
 # XXX: better way to ensure all important headers are installed already?
-TINYCC_DEPENDENCIES = enginebasic
+TINYCC_DEPENDENCIES = enginebasic-sdl
 
 # Calculate TINYCC_ARCH
 ifeq ($(ARCH),aarch64)

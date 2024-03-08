@@ -1,0 +1,6 @@
+config BR2_PACKAGE_ENGINEBASIC_SDL
+        bool "enginebasic"
+	select BR2_PACKAGE_LIBGPIOD
+        help
+          This is a comment that explains what enginebasic is. The help text
+          should be wrapped.
