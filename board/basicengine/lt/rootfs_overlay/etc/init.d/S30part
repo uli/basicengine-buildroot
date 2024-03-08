@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# Create/mount the data partition
+#
+
+root_device=$(rdev | cut -d' ' -f1 | sed 's,p\?[12]$,,')
+
+test -z "$root_device" && exit 1
+test ! -e "$root_device" && exit 1
+
+data_part=$(rdev | cut -d' ' -f1 | sed -e 's,2$,3,' -e 's,1$,2,')
+data_part_no="${data_part: -1}"
+
+case "$1" in
+  start)
+  	echo "Mounting data partition: "
+  	if test ! -e ${data_part} ; then
+  		# The "2048" is there is coerce fdisk to make a reasonable
+  		# suggestion for the start sector. If we don't do that, it
+  		# will create a 1 MB partition in the gap before partition
+  		# 1...
+	  	fdisk ${root_device} <<EOT
+n
+p
+${data_part_no}
+2048
+
+
+t
+${data_part_no}
+c
+w
+EOT
+		mount -o remount,rw /
+		touch /make_vfat
+		/sbin/reboot
+	elif test -e /make_vfat ; then
+		mkfs.vfat -F 32 -n BASIC ${data_part}
+		mount -o remount,rw /
+		rm /make_vfat
+		mount -o remount,ro /
+		mount -t vfat ${data_part} /basic
+	fi
+	if test ! -e /basic/sys ; then
+		zcat /usr/share/enginebasic/basic_sys.tar.gz | tar -C /basic -x
+	fi
+	;;
+  stop)
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+
