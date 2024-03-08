@@ -11,26 +11,16 @@ test ! -e "$root_device" && exit 1
 data_part=$(rdev | cut -d' ' -f1 | sed -e 's,2$,3,' -e 's,1$,2,')
 data_part_no="${data_part: -1}"
 
+echo ROOT DEV ${root_device}
+echo DATA PART ${data_part}
+echo DATA PART NO ${data_part_no}
+#sleep 10
+
 case "$1" in
   start)
   	echo "Mounting data partition: "
   	if test ! -e ${data_part} ; then
-  		# The "2048" is there is coerce fdisk to make a reasonable
-  		# suggestion for the start sector. If we don't do that, it
-  		# will create a 1 MB partition in the gap before partition
-  		# 1...
-	  	fdisk ${root_device} <<EOT
-n
-p
-${data_part_no}
-2048
-
-
-t
-${data_part_no}
-c
-w
-EOT
+  		echo 'type=c'|sfdisk -a --no-reread ${root_device}
 		mount -o remount,rw /
 		touch /make_vfat
 		/sbin/reboot
