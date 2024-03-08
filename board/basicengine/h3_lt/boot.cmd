@@ -1,12 +1,13 @@
 setenv fdt_high ffffffff
 
-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait ro
+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait ro quiet
 
 fatload mmc 0 $kernel_addr_r zImage
 
 if fatload mmc 0 $fdt_addr_r $menu_dtb ; then
 	true
 else
+	usb start
 	setenv bootmenu_0 Orange Pi Lite=setenv menu_dtb sun8i-h3-orangepi-lite.dtb
 	setenv bootmenu_1 Orange Pi One=setenv menu_dtb sun8i-h3-orangepi-one.dtb
 	setenv bootmenu_2 Orange Pi PC=setenv menu_dtb sun8i-h3-orangepi-pc.dtb
@@ -31,9 +32,7 @@ else
 	setenv bootmenu_21 ZeroPi=setenv menu_dtb sun8i-h3-zeropi.dtb
 	setenv bootmenu_22 Orange Pi R1=setenv menu_dtb sun8i-h2-plus-orangepi-r1.dtb
 	setenv bootmenu_23 Orange Pi Zero=setenv menu_dtb sun8i-h2-plus-orangepi-zero.dtb
-	setenv bootmenu_24 Orange Pi=setenv menu_dtb sun7i-a20-orangepi.dtb
-	setenv bootmenu_25 Orange Pi Mini=setenv menu_dtb sun7i-a20-orangepi-mini.dtb
-	bootmenu 60
+	bootmenu 99
 	saveenv
 	fatload mmc 0 $fdt_addr_r $menu_dtb
 fi  
