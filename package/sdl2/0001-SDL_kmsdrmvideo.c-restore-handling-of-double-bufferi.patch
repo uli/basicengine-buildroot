@@ -1,0 +1,27 @@
+From 1dbca7ea885696fea140a60d333d57aeea325d7a Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Sat, 9 Mar 2024 20:53:55 +0100
+Subject: [PATCH] SDL_kmsdrmvideo.c: restore handling of double buffering hint
+
+---
+ src/video/kmsdrm/SDL_kmsdrmvideo.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+index 83cdbf0..cc43dae 100644
+--- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
++++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+@@ -1423,6 +1423,10 @@ KMSDRM_CreateWindow(_THIS, SDL_Window * window)
+         return(SDL_OutOfMemory());
+     }
+ 
++    if (SDL_GetHintBoolean(SDL_HINT_VIDEO_DOUBLE_BUFFER, SDL_FALSE)) {
++        windata->double_buffer = SDL_TRUE;
++    }
++
+     /* Setup driver data for this window */
+     windata->viddata = viddata;
+     window->driverdata = windata;
+-- 
+2.39.2
+
