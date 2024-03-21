@@ -1,0 +1,65 @@
+From 778a2e45b4dd218df813d3b206ae734a875accce Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:23:34 +0100
+Subject: [PATCH 117/184] 
+ 0563-arm64-dts-allwinner-tanix-tx6-mini-enable-eth.patch
+
+---
+ .../allwinner/sun50i-h6-tanix-tx6-mini.dts    | 34 ++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6-mini.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6-mini.dts
+index 08d84160d..d9119e1cd 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6-mini.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6-mini.dts
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+-// Copyright (c) 2021 Jernej Skrabec <jernej.skrabec@gmail.com>
++// Copyright (c) 2021 Jernej Skrabec <jernej.skrabec@gmail.com>, piotr.oniszczuk@gmail.com
+ 
+ /dts-v1/;
+ 
+@@ -8,8 +8,40 @@
+ / {
+ 	model = "Tanix TX6 mini";
+ 	compatible = "oranth,tanix-tx6-mini", "allwinner,sun50i-h6";
++
++	aliases {
++		ethernet0 = &emac;
++	};
++
+ };
+ 
+ &r_ir {
+ 	linux,rc-map-name = "rc-tanix-tx3mini";
+ };
++
++&ac200_pwm_clk {
++	status = "okay";
++};
++
++&emac {
++	pinctrl-names = "default";
++	pinctrl-0 = <&ext_rmii_pins>;
++	phy-mode = "rmii";
++	phy-handle = <&ext_rmii_phy>;
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&mdio {
++	ext_rmii_phy: ethernet-phy@1 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <1>;
++	};
++};
++
++&pwm {
++	status = "okay";
++};
+-- 
+2.39.2
+

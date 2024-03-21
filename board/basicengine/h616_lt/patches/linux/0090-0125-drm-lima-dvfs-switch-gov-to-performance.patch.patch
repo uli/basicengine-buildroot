@@ -1,0 +1,25 @@
+From 551d77ef7f322edce35f7eb0845a4547b9f58125 Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:22:55 +0100
+Subject: [PATCH 090/184] 0125-drm-lima-dvfs-switch-gov-to-performance.patch
+
+---
+ drivers/gpu/drm/lima/lima_devfreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
+index bc8fb4e38..e7bae966e 100644
+--- a/drivers/gpu/drm/lima/lima_devfreq.c
++++ b/drivers/gpu/drm/lima/lima_devfreq.c
+@@ -157,7 +157,7 @@ int lima_devfreq_init(struct lima_device *ldev)
+ 	ldevfreq->gov_data.downdifferential = 5;
+ 
+ 	devfreq = devm_devfreq_add_device(dev, &lima_devfreq_profile,
+-					  DEVFREQ_GOV_SIMPLE_ONDEMAND,
++					  DEVFREQ_GOV_PERFORMANCE,
+ 					  &ldevfreq->gov_data);
+ 	if (IS_ERR(devfreq)) {
+ 		dev_err(dev, "Couldn't initialize GPU devfreq\n");
+-- 
+2.39.2
+

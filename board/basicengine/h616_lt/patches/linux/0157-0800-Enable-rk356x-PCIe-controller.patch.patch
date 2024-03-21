@@ -1,0 +1,93 @@
+From d60f07b81a30a8eb062127c7b9652b9e70c47c89 Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:24:22 +0100
+Subject: [PATCH 157/184] 0800-Enable-rk356x-PCIe-controller.patch
+
+The pcie2x1 controller is common between the rk3568 and rk3566. It is a
+single lane pcie2 compliant controller.
+
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+---
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 52 ++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+
+Add the nodes to enable the pcie controller on the quartz64 model a
+board.
+
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+---
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+---
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+index 25a8c781f..67e73bbf9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+@@ -151,6 +151,18 @@ vcc3v3_pcie_p: vcc3v3-pcie-p-regulator {
+ 		vin-supply = <&vcc_3v3>;
+ 	};
+ 
++	vcc3v3_pcie_p: vcc3v3_pcie_p {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pcie_enable_h>;
++		regulator-name = "vcc3v3_pcie_p";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc_3v3>;
++	};
++
+ 	vcc5v0_usb: vcc5v0_usb {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vcc5v0_usb";
+@@ -230,6 +242,10 @@ &combphy2 {
+ 	status = "okay";
+ };
+ 
++&combphy2 {
++	status = "okay";
++};
++
+ &cpu0 {
+ 	cpu-supply = <&vdd_cpu>;
+ };
+@@ -572,6 +588,14 @@ &pcie2x1 {
+ 	status = "okay";
+ };
+ 
++&pcie2x1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie_reset_h>;
++	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
++	vpcie3v3-supply = <&vcc3v3_pcie_p>;
++	status = "okay";
++};
++
+ &pinctrl {
+ 	bt {
+ 		bt_enable_h: bt-enable-h {
+@@ -613,6 +637,16 @@ pcie_reset_h: pcie-reset-h {
+ 		};
+ 	};
+ 
++	pcie {
++		pcie_enable_h: pcie-enable-h {
++			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++		pcie_reset_h: pcie-reset-h {
++			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
+ 	pmic {
+ 		pmic_int_l: pmic-int-l {
+ 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
+-- 
+2.39.2
+

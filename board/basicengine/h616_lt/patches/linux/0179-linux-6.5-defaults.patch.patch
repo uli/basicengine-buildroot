@@ -1,0 +1,49 @@
+From 1c37c8422167d198f89f8804c2c180f3255638d4 Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:25:04 +0100
+Subject: [PATCH 179/184] linux-6.5-defaults.patch
+
+---
+ arch/x86/boot/Makefile |  2 +-
+ arch/x86/boot/video.c  | 11 +----------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index 9e38ffaad..948a58936 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -27,7 +27,7 @@ KCOV_INSTRUMENT		:= n
+ # Set it to -DSVGA_MODE=NORMAL_VGA if you just want the EGA/VGA mode.
+ # The number is the same as you would ordinarily press at bootup.
+ 
+-SVGA_MODE	:= -DSVGA_MODE=NORMAL_VGA
++SVGA_MODE	:= -DSVGA_MODE=786
+ 
+ targets		:= vmlinux.bin setup.bin setup.elf bzImage
+ targets		+= fdimage fdimage144 fdimage288 image.iso hdimage
+diff --git a/arch/x86/boot/video.c b/arch/x86/boot/video.c
+index f2e96905b..a35f697a8 100644
+--- a/arch/x86/boot/video.c
++++ b/arch/x86/boot/video.c
+@@ -324,17 +324,8 @@ void set_video(void)
+ 	save_screen();
+ 	probe_cards(0);
+ 
+-	for (;;) {
+-		if (mode == ASK_VGA)
+-			mode = mode_menu();
+-
+-		if (!set_mode(mode))
+-			break;
++	set_mode(mode);
+ 
+-		printf("Undefined video mode number: %x\n", mode);
+-		mode = ASK_VGA;
+-	}
+-	boot_params.hdr.vid_mode = mode;
+ 	vesa_store_edid();
+ 	store_mode_params();
+ 
+-- 
+2.39.2
+

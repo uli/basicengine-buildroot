@@ -1,0 +1,32 @@
+From ac7674654585a9456b7e0321969c4f063a74cd1e Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:24:26 +0100
+Subject: [PATCH 161/184] 
+ 0841-arm64-dts-rockchip-increas-alarm-cpu-temp-to-85.patch
+
+---
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index f6141d3d2..b8beed631 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -1488,12 +1488,12 @@ cpu_thermal: cpu-thermal {
+ 
+ 			trips {
+ 				cpu_alert0: cpu_alert0 {
+-					temperature = <70000>;
++					temperature = <85000>;
+ 					hysteresis = <2000>;
+ 					type = "passive";
+ 				};
+ 				cpu_alert1: cpu_alert1 {
+-					temperature = <75000>;
++					temperature = <90000>;
+ 					hysteresis = <2000>;
+ 					type = "passive";
+ 				};
+-- 
+2.39.2
+

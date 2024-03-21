@@ -1,0 +1,34 @@
+From 615f412eb361677d1daafaa44892b3df2e927807 Mon Sep 17 00:00:00 2001
+From: from minimyth2 <unknown@unknown.org>
+Date: Thu, 18 Jan 2024 08:23:32 +0100
+Subject: [PATCH 116/184] 
+ 0562-arm64-dts-allwinner-gs1-fix-eMMC-and-incr-vcpu-limit.patch
+
+---
+ arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
+index 9ec49ac2f..f5a6ef502 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
+@@ -138,6 +138,7 @@ &mmc2 {
+ 	vqmmc-supply = <&reg_bldo2>;
+ 	non-removable;
+ 	cap-mmc-hw-reset;
++	mmc-hs200-1_8v;
+ 	bus-width = <8>;
+ 	status = "okay";
+ };
+@@ -256,7 +257,7 @@ reg_cldo3: cldo3 {
+ 			reg_dcdca: dcdca {
+ 				regulator-always-on;
+ 				regulator-min-microvolt = <810000>;
+-				regulator-max-microvolt = <1160000>;
++				regulator-max-microvolt = <1200000>;
+ 				regulator-ramp-delay = <2500>;
+ 				regulator-name = "vdd-cpu";
+ 			};
+-- 
+2.39.2
+
