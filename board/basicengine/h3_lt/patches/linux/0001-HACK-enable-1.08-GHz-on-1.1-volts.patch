@@ -1,0 +1,25 @@
+From ae4e42c93eddad9a9b2c8a14ff35e88abad64743 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Wed, 13 Mar 2024 16:48:14 +0100
+Subject: [PATCH] HACK: enable 1.08 GHz on 1.1 volts
+
+---
+ arch/arm/boot/dts/allwinner/sun8i-h3.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi b/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi
+index 4cafc67..2be4c65 100644
+--- a/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi
++++ b/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi
+@@ -62,7 +62,7 @@ opp-816000000 {
+ 
+ 		opp-1008000000 {
+ 			opp-hz = /bits/ 64 <1008000000>;
+-			opp-microvolt = <1200000 1200000 1300000>;
++			opp-microvolt = <1100000 1100000 1300000>;
+ 			clock-latency-ns = <244144>; /* 8 32k periods */
+ 		};
+ 	};
+-- 
+2.39.2
+
