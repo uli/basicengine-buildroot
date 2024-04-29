@@ -1,0 +1,30 @@
+From 52a38ac5c9b3d5864ad0bc213da708d1b1c2b898 Mon Sep 17 00:00:00 2001
+From: Ulrich Hecht <uli@basicengine.org>
+Date: Mon, 29 Apr 2024 14:05:05 +0200
+Subject: [PATCH] ARM: dts: sun8i-h3: enforce MMC ordering using aliases
+
+Signed-off-by: Ulrich Hecht <uli@basicengine.org>
+---
+ arch/arm/boot/dts/allwinner/sun8i-h3.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi b/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi
+index 2be4c65..ff18410 100644
+--- a/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi
++++ b/arch/arm/boot/dts/allwinner/sun8i-h3.dtsi
+@@ -44,6 +44,12 @@
+ #include <dt-bindings/thermal/thermal.h>
+ 
+ / {
++	aliases {
++		mmc0 = &mmc0;
++		mmc1 = &mmc1;
++		mmc2 = &mmc2;
++	};
++
+ 	cpu0_opp_table: opp-table-cpu {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+-- 
+2.39.2
+
