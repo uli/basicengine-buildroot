@@ -6,6 +6,7 @@ BR2_GLOBAL_PATCH_DIR="board/basicengine/h616_lt/patches"
 BR2_TARGET_GENERIC_HOSTNAME="basicengine"
 BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the BASIC Engine H616"
 BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_GENERATE_LOCALE="en_US"
 BR2_ROOTFS_OVERLAY="board/basicengine/common/rootfs_overlay board/basicengine/lt/rootfs_overlay"
 BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
 BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/basicengine/h616_lt/genimage.cfg"
@@ -48,6 +49,7 @@ BR2_PACKAGE_DTC_PROGRAMS=y
 BR2_PACKAGE_LIBGUDEV=y
 BR2_PACKAGE_LIBEVDEV=y
 BR2_PACKAGE_NCURSES_ADDITIONAL_TERMINFO="a/ansiw c/cons25-debian"
+BR2_PACKAGE_SLANG=y
 BR2_PACKAGE_DROPBEAR=y
 BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS=y
 # BR2_PACKAGE_OPENSSH_SERVER is not set
