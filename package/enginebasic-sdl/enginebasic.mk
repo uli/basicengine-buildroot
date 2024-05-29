@@ -20,7 +20,7 @@ define ENGINEBASIC_SDL_BUILD_CMDS
     cd $(@D) ; PATH="$(STAGING_DIR)/usr/bin:$(PATH)" CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" DEMOS_DIR=$(@D)/demos ./configure.sh
     mkdir -p $(@D)/.git ; touch $(@D)/.git/index
     cd $(@D) ; ninja -f build.ninja.sdl ttbasic/version.h
-    echo "#define STR_VARSION \"$(shell git -C $(ENGINEBASIC_SDL_DL_DIR)/git describe --abbrev=4 --dirty --always --tags)\"" >$(@D)/ttbasic/version.h
+    echo "#define STR_VARSION \"$(shell git -C $(@D) describe --abbrev=4 --always --tags)\"" >$(@D)/ttbasic/version.h
     cd $(@D) ; ninja -f build.ninja.sdl ; ninja -f build.ninja.sdl init_dir
 endef
 
